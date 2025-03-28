@@ -1,0 +1,103 @@
+<!-- history.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search History - Pharma Flow</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background: #007bff;
+            padding: 20px;
+            color: white;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+        }
+        .sidebar ul li.active {
+            background: #0056b3;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+            width: calc(100% - 260px);
+        }
+        .history-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .clear-btn {
+            background: #ff4d4d;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <aside class="sidebar">
+            <h3>Pharma Flow</h3>
+            <ul>
+                <li class="menu-item"><a href="home.html">Home</a></li>
+                <li class="menu-item"><a href="medicine_info.html">Medicine Info</a></li>
+                <li class="menu-item active"><a href="history.html">History</a></li>
+                <li class="menu-item"><a href="settings.html">Settings</a></li>
+                <li class="menu-item"><a href="feedback.html">Feedback</a></li>
+                <br><br><br><br>
+                <button onclick="logoutUser()">Logout</button>
+            </ul>
+        </aside>
+        
+        <div class="content">
+            <h2>Search History</h2>
+            <div id="historyContainer"></div>
+            <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+        </div>
+    </div>
+
+    <script>
+        function clearPageStack() {
+          setTimeout(() => {
+              window.history.pushState(null, null, window.location.href);
+              window.onpopstate = function () {
+                  window.history.pushState(null, null, window.location.href);
+              };
+          }, 0);
+      }
+      
+      window.onload = clearPageStack;
+ 
+      
+ 
+  </script>
+</body>
+</html>

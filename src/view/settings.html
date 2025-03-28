@@ -1,0 +1,123 @@
+<!-- settings.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Pharma Flow</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background: #007bff;
+            padding: 20px;
+            color: white;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+        }
+        .sidebar ul li.active {
+            background: #0056b3;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+            width: calc(100% - 260px);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        #statusMessage {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <h3>Pharma Flow</h3>
+            <ul>
+                <li class="menu-item"><a href="home.html">Home</a></li>
+                <li class="menu-item"><a href="medicine_info.html">Medicine Info</a></li>
+                <li class="menu-item"><a href="history.html">History</a></li>
+                <li class="menu-item active"><a href="settings.html">Settings</a></li>
+                <li class="menu-item"><a href="feedback.html">Feedback</a></li>
+                <br><br><br><br>
+                <button onclick="logoutUser()">Logout</button>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="content">
+            <h2>Change Password</h2>
+            <div class="form-group">
+                <label for="currentPassword">Current Password:</label>
+                <input type="password" id="currentPassword" placeholder="Enter current password">
+            </div>
+            <div class="form-group">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" placeholder="Enter new password">
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm New Password:</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+            </div>
+            <button class="btn" onclick="updatePassword()">Update Password</button>
+            <p id="statusMessage"></p>
+        </div>
+    </div>
+    <script>
+        function clearPageStack() {
+          setTimeout(() => {
+              window.history.pushState(null, null, window.location.href);
+              window.onpopstate = function () {
+                  window.history.pushState(null, null, window.location.href);
+              };
+          }, 0);
+      }
+      
+      window.onload = clearPageStack;
+ 
+      
+ 
+  </script>
+</body>
+</html>

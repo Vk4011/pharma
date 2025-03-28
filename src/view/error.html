@@ -1,0 +1,63 @@
+<!-- error.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Pharma Flow</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .main-container {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            background: linear-gradient(135deg, #f0f2f5 0%, #dfe9f3 100%);
+        }
+        .error-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 50px;
+            color: #ff4d4d;
+        }
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+        .error-image {
+            width: 100px;
+            height: auto;
+            margin-bottom: 5px;
+        }
+        .btn-home {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .btn-home:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="error-box">
+            <img src="error.jpg" alt="Error" class="error-image">
+            <h1>Oops!</h1>
+            <p>Something went wrong.<br><br> The page you are looking for might be missing or an error has occurred.</p>
+            <a href="home.html" class="btn-home">Go Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

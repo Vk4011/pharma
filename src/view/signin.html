@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Pharma Flow</title>
+    <link rel="icon" href="data:,">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input.error {
+            border-color: #ff4444;
+        }
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #apiError {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ffeeee;
+            border: 1px solid #ffdddd;
+            border-radius: 4px;
+            display: none;
+        }
+        #successMessage {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 4px;
+            color: #2e7d32;
+            text-align: center;
+            display: none;
+        }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form id="signinForm">
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Enter your email" required>
+                <div id="emailError" class="error-message">Please enter a valid email address</div>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Enter password (min 8 characters)" required minlength="8">
+                <div id="passwordError" class="error-message">Password must be at least 8 characters</div>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="confirm_password" placeholder="Confirm password" required>
+                <div id="confirmPasswordError" class="error-message">Passwords do not match</div>
+            </div>
+            
+            <button type="submit" id="submitBtn">Sign Up</button>
+            <div class="loader" id="loader"></div>
+        </form>
+        <div id="apiError" class="error-message"></div>
+        <div id="successMessage"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signinForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm_password');
+            const apiErrorElement = document.getElementById('apiError');
+            const successMessageElement = document.getElementById('successMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            const loader = document.getElementById('loader');
+            
+            // Real-time validation
+            emailInput.addEventListener('input', validateEmail);
+            passwordInput.addEventListener('input', validatePassword);
+            confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+            
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                clearMessages();
+                
+                if (validateForm()) {
+                    try {
+                        // Show loading state
+                        submitBtn.disabled = true;
+                        loader.style.display = 'block';
+                        
+                        const response = await fetch('http://localhost:9090/api/auth/register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                email: emailInput.value.trim(),
+                                password: passwordInput.value.trim(),
+                                confirmPassword: confirmPasswordInput.value.trim()
+                            })
+                        });
+
+                        // First check if response is empty
+                        const responseText = await response.text();
+                        
+                        if (!responseText) {
+                            // Empty response but successful
+                            if (response.ok) {
+                                showSuccessMessage('Registration successful! You can now log in.');
+                                form.reset();
+                                return;
+                            } else {
+                                throw new Error('Registration failed with empty response');
+                            }
+                        }
+                        
+                        // Try to parse as JSON
+                        try {
+                            const result = JSON.parse(responseText);
+                            
+                            if (!response.ok) {
+                                // Handle field-specific errors from backend
+                                if (response.status === 400 && result.errors) {
+                                    Object.entries(result.errors).forEach(([field, message]) => {
+                                        const errorElement = document.getElementById(`${field}Error`);
+                                        if (errorElement) {
+                                            errorElement.textContent = message;
+                                            errorElement.style.display = 'block';
+                                            document.getElementById(field).classList.add('error');
+                                        }
+                                    });
+                                    throw new Error('Please fix the form errors');
+                                }
+                                throw new Error(result.message || 'Registration failed');
+                            }
+                            
+                            // Success case
+                            showSuccessMessage(result.message || 'Registration successful! You can now log in.');
+                            form.reset();
+                            
+                        } catch (e) {
+                            // Not JSON - treat as plain text response
+                            if (response.ok) {
+                                showSuccessMessage(responseText || 'Registration successful!');
+                                form.reset();
+                            } else {
+                                throw new Error(responseText || 'Registration failed');
+                            }
+                        }
+                        
+                    } catch (error) {
+                        console.error('Registration error:', error);
+                        showApiError(error.message);
+                    } finally {
+                        // Hide loading state
+                        submitBtn.disabled = false;
+                        loader.style.display = 'none';
+                    }
+                }
+            });
+            
+            function validateEmail() {
+                const email = emailInput.value.trim();
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                const isValid = emailPattern.test(email);
+                
+                toggleError(emailInput, 'emailError', !isValid, 'Please enter a valid email address');
+                return isValid;
+            }
+            
+            function validatePassword() {
+                const password = passwordInput.value;
+                const isValid = password.length >= 8;
+                
+                toggleError(passwordInput, 'passwordError', !isValid, 'Password must be at least 8 characters');
+                return isValid;
+            }
+            
+            function validateConfirmPassword() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                const isValid = password === confirmPassword && password !== '';
+                
+                toggleError(confirmPasswordInput, 'confirmPasswordError', !isValid, 'Passwords do not match');
+                return isValid;
+            }
+            
+            function validateForm() {
+                const isEmailValid = validateEmail();
+                const isPasswordValid = validatePassword();
+                const isConfirmPasswordValid = validateConfirmPassword();
+                
+                return isEmailValid && isPasswordValid && isConfirmPasswordValid;
+            }
+            
+            function toggleError(input, errorId, showError, message = '') {
+                const errorElement = document.getElementById(errorId);
+                
+                if (showError) {
+                    input.classList.add('error');
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                } else {
+                    input.classList.remove('error');
+                    errorElement.style.display = 'none';
+                }
+            }
+            
+            function showApiError(message) {
+                apiErrorElement.textContent = message;
+                apiErrorElement.style.display = 'block';
+                successMessageElement.style.display = 'none';
+            }
+            
+            function showSuccessMessage(message) {
+                successMessageElement.textContent = message;
+                successMessageElement.style.display = 'block';
+                apiErrorElement.style.display = 'none';
+            }
+            
+            function clearMessages() {
+                apiErrorElement.style.display = 'none';
+                successMessageElement.style.display = 'none';
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.style.display = 'none';
+                });
+                document.querySelectorAll('.error').forEach(el => {
+                    el.classList.remove('error');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+/* styles.css */
+
+/* General styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f0f2f5 0%, #113e6e 100%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 45%;
+    min-width: 350px;
+    transition: all 0.3s ease-in-out;
+    backdrop-filter: blur(10px);
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+h2 {
+    color: #222;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+button {
+    background: linear-gradient(to right, #007bff, #00d4ff);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.4s;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background: linear-gradient(to right, #0056b3, #0090ff);
+    transform: scale(1.05);
+}
+
+/* Inputs and Textareas */
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 17px;
+    outline: none;
+    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Star Rating - Left to Right */
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    direction: ltr;
+}
+
+.star-rating span {
+    font-size: 28px;
+    cursor: pointer;
+    color: lightgray;
+    transition: all 0.3s;
+}
+
+.star-rating span:hover, .star-rating span:hover ~ span {
+    color: gold;
+    transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+    button {
+        font-size: 16px;
+    }
+}
