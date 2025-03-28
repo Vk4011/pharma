@@ -1,0 +1,46 @@
+
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background: #007bff;
+            padding: 20px;
+            color: white;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+        }
+        .sidebar ul li.active {
+            background: #0056b3;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+            width: calc(100% - 260px);
+        }
+        .store-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+    
