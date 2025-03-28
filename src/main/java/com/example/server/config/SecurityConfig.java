@@ -17,8 +17,17 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())  // Disable CSRF for API endpoints
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()  // Allow public access to auth endpoints
+                .requestMatchers(
+                    "/",               // Root endpoint
+                    "/db",             // Database console
+                    "/db/**",          // All DB console paths
+                    "/api/auth/**",    // Authentication endpoints
+                    "/h2-console/**"   // H2 console (if using)
+                ).permitAll()          // Allow public access to these endpoints
                 .anyRequest().authenticated()  // Secure all other endpoints
+            )
+            .headers(headers -> headers
+                .frameOptions().disable()  // Needed for H2 console
             );
         
         return http.build();
