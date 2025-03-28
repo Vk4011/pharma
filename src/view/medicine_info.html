@@ -1,4 +1,3 @@
-<!-- medicine_info.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,52 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medicine Info - Pharma Flow</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .main-container {
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 250px;
-            background: #007bff;
-            padding: 20px;
-            color: white;
-            height: 100%;
-            position: fixed;
-            left: 0;
-            top: 0;
-            overflow-y: auto;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            font-size: 18px;
-        }
-        .sidebar ul li.active {
-            background: #0056b3;
-        }
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-            width: calc(100% - 260px);
-        }
-        .medicine-card {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 5px;
-            background: #f9f9f9;
-        }
-    </style>
+    <link rel="stylesheet" href="./style/medicine.css">
+    <script src="./js/medicine.js" defer></script>
+  
 </head>
 <body>
     <div class="main-container">
@@ -77,24 +33,13 @@
                     <option value="" disabled selected>Select a medicine</option>
                 </select>
                 <button onclick="fetchMedicineInfo()">Search</button>
+                <button onclick="fetchAllMedicines()">Show All Medicines</button>
             </div>
             <div id="medicineDetails" class="medicine-card"></div>
+            <div id="allMedicines"></div>
         </div>
     </div>
-    <script>
-        function clearPageStack() {
-          setTimeout(() => {
-              window.history.pushState(null, null, window.location.href);
-              window.onpopstate = function () {
-                  window.history.pushState(null, null, window.location.href);
-              };
-          }, 0);
-      }
-      
-      window.onload = clearPageStack;
- 
-      
- 
-  </script>
+
+    
 </body>
 </html>
