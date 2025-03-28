@@ -1,36 +1,74 @@
 /* styles.css */
 
-/* General styles */
+:root {
+    /* Light Mode Colors */
+    --bg-primary: linear-gradient(135deg, #f0f2f5 0%, #113e6e 100%);
+    --bg-container: rgba(255, 255, 255, 0.95);
+    --text-primary: #222;
+    --border-color: #ccc;
+    --input-bg: rgba(255, 255, 255, 0.8);
+    --btn-gradient: linear-gradient(to right, #007bff, #00d4ff);
+    --btn-hover-gradient: linear-gradient(to right, #0056b3, #0090ff);
+    --shadow-primary: rgba(0, 0, 0, 0.15);
+    --focus-shadow: rgba(0, 123, 255, 0.5);
+}
+
+/* Dark Mode Colors */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: linear-gradient(135deg, #1a202c 0%, #2c5282 100%);
+        --bg-container: rgba(45, 55, 72, 0.95);
+        --text-primary: #e2e8f0;
+        --border-color: #4a5568;
+        --input-bg: rgba(45, 55, 72, 0.8);
+        --btn-gradient: linear-gradient(to right, #3182ce, #00a3ff);
+        --btn-hover-gradient: linear-gradient(to right, #2c5282, #0090ff);
+        --shadow-primary: rgba(0, 0, 0, 0.3);
+        --focus-shadow: rgba(56, 161, 255, 0.5);
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f0f2f5 0%, #113e6e 100%);
+    background: var(--bg-primary);
+    color: var(--text-primary);
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
+    line-height: 1.6;
 }
 
 .container {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--bg-container);
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 6px 20px var(--shadow-primary);
     text-align: center;
     width: 45%;
     min-width: 350px;
     transition: all 0.3s ease-in-out;
     backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
 }
 
 .container:hover {
     transform: scale(1.02);
+    box-shadow: 0px 8px 25px var(--shadow-primary);
 }
 
 h2 {
-    color: #222;
+    color: var(--text-primary);
     font-size: 26px;
     font-weight: bold;
     margin-bottom: 15px;
@@ -38,7 +76,7 @@ h2 {
 
 /* Buttons */
 button {
-    background: linear-gradient(to right, #007bff, #00d4ff);
+    background: var(--btn-gradient);
     color: white;
     border: none;
     padding: 12px 20px;
@@ -47,12 +85,30 @@ button {
     transition: 0.4s;
     font-size: 18px;
     font-weight: bold;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 10px var(--shadow-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
 }
 
 button:hover {
-    background: linear-gradient(to right, #0056b3, #0090ff);
+    background: var(--btn-hover-gradient);
     transform: scale(1.05);
+    box-shadow: 0px 6px 15px var(--shadow-primary);
 }
 
 /* Inputs and Textareas */
@@ -60,17 +116,18 @@ input, textarea, select {
     width: 100%;
     padding: 12px;
     margin: 12px 0;
-    border: 2px solid #ccc;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 17px;
     outline: none;
     transition: 0.3s;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--input-bg);
+    color: var(--text-primary);
 }
 
 input:focus, textarea:focus, select:focus {
     border-color: #007bff;
-    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+    box-shadow: 0px 0px 8px var(--focus-shadow);
 }
 
 /* Star Rating - Left to Right */
@@ -84,7 +141,7 @@ input:focus, textarea:focus, select:focus {
 .star-rating span {
     font-size: 28px;
     cursor: pointer;
-    color: lightgray;
+    color: #718096;  /* Neutral star color for both themes */
     transition: all 0.3s;
 }
 
@@ -93,12 +150,64 @@ input:focus, textarea:focus, select:focus {
     transform: scale(1.2);
 }
 
+/* Placeholder Styles */
+::placeholder {
+    color: #718096;
+    opacity: 0.7;
+}
+
+/* Scrollbar Styles (for webkit browsers) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--input-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #007bff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
         width: 90%;
+        min-width: auto;
+        margin: 20px;
     }
+
     button {
         font-size: 16px;
+        padding: 10px 15px;
+    }
+
+    input, textarea, select {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+/* Accessibility and Print Styles */
+@media print {
+    body {
+        background: white;
+    }
+    
+    .container {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Reduce Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
     }
 }
